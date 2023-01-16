@@ -44,7 +44,7 @@ void URandomMovementProcessor::Execute(FMassEntityManager& EntityManager, FMassE
 			const TArrayView<FTransformFragment> TransformList = Context.GetMutableFragmentView<FTransformFragment>();
 			const TArrayView<FMassMoveTargetFragment> NavTargetList = Context.GetMutableFragmentView<FMassMoveTargetFragment>();
 			const FMassMovementParameters& MovementParams = Context.GetConstSharedFragment<FMassMovementParameters>();
-			//const TArrayView<const FRecastNavMeshFragment> NavFragment = Context.GetFragmentView<FRecastNavMeshFragment>();
+
 			for (int32 EntityIndex = 0; EntityIndex < Context.GetNumEntities(); ++EntityIndex)
 			{
 				FTransform& Transform = TransformList[EntityIndex].GetMutableTransform();
@@ -56,28 +56,15 @@ void URandomMovementProcessor::Execute(FMassEntityManager& EntityManager, FMassE
 				if (MoveTarget.Center == FVector::ZeroVector)
 				{
 					MoveTarget.Center = FVector(6000.f, 0.f, CurrentLocation.Z);
-
-				}
-				//auto world = GetWorld();
-				//
-				//UNavigationSystemV1* NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
-
-
-				//UNavigationPath* path = NavSys->FindPathToLocationSynchronously(GetWorld(), CurrentLocation, FVector(6000.f, 0.f, 1.f), NULL);
-				//	
-				//if (!path->PathPoints.IsEmpty())
-				//{
-				//	MoveTarget.Center = FVector(path->PathPoints[1]);
-				//}
-								//path->ConditionalFinishDestroy();
-					
-					
-				
-				MoveTarget.Center = PathFinding->GetNextPathPoint(CurrentLocation, FVector(6000.f, 0.f, 1.f));
+					MoveTarget.DesiredSpeed = FMassInt16Real(MovementParams.DefaultDesiredSpeed);
+				}				
 				//MoveTarget.Center = FVector(6000.f, 0.f, 1.f);
 				MoveTarget.DistanceToGoal = (MoveTarget.Center - Transform.GetLocation()).Size();
 				MoveTarget.Forward = (MoveTarget.Center - Transform.GetLocation()).GetSafeNormal();
-				MoveTarget.DesiredSpeed = FMassInt16Real(MovementParams.DefaultDesiredSpeed);
+				if (MoveTarget.DistanceToGoal < 50.f)
+				{
+					MoveTarget.Center = PathFinding->GetNextPathPoint(CurrentLocation, FVector(12000.f, 0.f, 1.f));
+				}
 			}
 			
 		});
