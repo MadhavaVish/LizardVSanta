@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "MassProcessor.h"
 #include "MassCommon/Public/MassCommonFragments.h"
+#include "PathFindingSubsystem.h"
 #include "RandomMovementProcessor.generated.h"
 /**
  * 
@@ -17,8 +18,11 @@ public:
 	URandomMovementProcessor();
 
 protected:
+	virtual void Initialize(UObject& Owner) override;
 	virtual void ConfigureQueries() override;
 	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
 
+	TObjectPtr<UWorld> World;
+	TObjectPtr<UPathFindingSubsystem> PathFinding;
 	FMassEntityQuery EntityQuery;
 };

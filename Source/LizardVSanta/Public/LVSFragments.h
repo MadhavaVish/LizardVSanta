@@ -37,3 +37,10 @@ struct LIZARDVSANTA_API FRecastNavMeshFragment : public FObjectWrapperFragment
 	GENERATED_BODY()
 	TWeakObjectPtr<ARecastNavMesh> NavMesh;
 };
+
+USTRUCT()
+struct LIZARDVSANTA_API FNavSystem : public FMassSharedFragment
+{
+	GENERATED_BODY()
+	TWeakObjectPtr<UNavigationSystemV1> NavSys;
+};
