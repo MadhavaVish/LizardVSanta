@@ -9,8 +9,22 @@ public class LizardVSanta : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
-
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		PrivateDependencyModuleNames.AddRange(new string[] { 
+                "NavigationSystem",
+                "MassEntity",
+                "StructUtils",
+                "MassCommon",
+                "MassMovement",
+                "MassActors",
+                "MassSpawner",
+                "MassGameplayDebug",
+                "MassSignals",
+                "MassCrowd",
+                "MassActors",
+                "MassSpawner",
+                "MassRepresentation",
+                "MassReplication",
+                "MassNavigation"});
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

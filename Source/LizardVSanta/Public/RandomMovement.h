@@ -10,8 +10,9 @@
  * 
  */
 UCLASS()
-class LIZARDVSANTA_API URandomMovement : public UMassEntityTraitBase
+class   URandomMovement : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
-	
+protected:
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 };

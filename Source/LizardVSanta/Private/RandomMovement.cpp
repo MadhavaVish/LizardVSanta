@@ -2,4 +2,9 @@
 
 
 #include "RandomMovement.h"
-
+#include "LVSFragments.h"
+#include "MassEntityTemplateRegistry.h"
+void URandomMovement::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
+{
+	BuildContext.AddFragment<FRandomTarget>();
+}

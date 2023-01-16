@@ -3,13 +3,37 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
+#include "MassCommonFragments.h"
+#include "MassEntityTypes.h"
+#include "MassCommonTypes.h"
+#include "GridActorComponent.h"
+#include "Navmesh/RecastNavMesh.h"
+#include "LVSFragments.generated.h"
 /**
  * 
  */
-class LIZARDVSANTA_API LVSFragments
+
+//class UGridActorComponent;
+
+USTRUCT()
+struct LIZARDVSANTA_API FRandomTarget : public FMassFragment
 {
-public:
-	LVSFragments();
-	~LVSFragments();
+	GENERATED_BODY()
+
+	FVector Target;
+};
+
+USTRUCT()
+
+struct LIZARDVSANTA_API FGridNavigableFragment : public FObjectWrapperFragment
+{
+	GENERATED_BODY()
+	TWeakObjectPtr<UGridActorComponent> Grid;
+};
+
+USTRUCT()
+struct LIZARDVSANTA_API FRecastNavMeshFragment : public FObjectWrapperFragment
+{
+	GENERATED_BODY()
+	TWeakObjectPtr<ARecastNavMesh> NavMesh;
 };

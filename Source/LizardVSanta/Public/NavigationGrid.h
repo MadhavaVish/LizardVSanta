@@ -4,14 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "MassEntityTraitBase.h"
+#include "MassAgentTraits.h"
 #include "NavigationGrid.generated.h"
-
 /**
  * 
  */
 UCLASS()
-class LIZARDVSANTA_API UNavigationGrid : public UMassEntityTraitBase
+class LIZARDVSANTA_API UNavigationGrid : public UMassAgentSyncTrait
 {
 	GENERATED_BODY()
-	
+protected:
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 };

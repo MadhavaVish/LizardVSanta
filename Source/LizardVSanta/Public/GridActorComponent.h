@@ -15,7 +15,9 @@ class LIZARDVSANTA_API UGridActorComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UGridActorComponent();
-
+	TArray<bool> Grid;
+	UFUNCTION(BlueprintPure)
+		TArray<bool>& getGrid() { return Grid; }
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
