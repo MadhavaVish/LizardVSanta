@@ -61,8 +61,8 @@ void URandomMovementProcessor::Execute(FMassEntityManager& EntityManager, FMassE
 				//MoveTarget.Center = FVector(6000.f, 0.f, 1.f);
 				MoveTarget.DistanceToGoal = (MoveTarget.Center - Transform.GetLocation()).Size();
 				MoveTarget.Forward = (MoveTarget.Center - Transform.GetLocation()).GetSafeNormal();
-				MoveTarget.Center = PathFinding->GetNextPathPoint(CurrentLocation, FVector(15000.f, 15000.f, -100.f));
-			
+				MoveTarget.Center = PathFinding->GetNextPathPoint(CurrentLocation, FVector(11000.f, 11000.f, -100.f));
+
 			}
 			
 		});
