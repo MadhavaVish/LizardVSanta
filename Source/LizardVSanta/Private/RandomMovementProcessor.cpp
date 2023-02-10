@@ -9,7 +9,7 @@
 #include "LVSFragments.h"
 #include "Engine/World.h"
 #include "MassDebuggerSubsystem.h"
-
+#include "Kismet/KismetMathLibrary.h"
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "MassDebugVisualizationComponent.h"
 URandomMovementProcessor::URandomMovementProcessor()
@@ -44,8 +44,8 @@ void URandomMovementProcessor::Execute(FMassEntityManager& EntityManager, FMassE
 
 	EntityQuery.ForEachEntityChunk(EntityManager, Context,
 		[&, this](FMassExecutionContext& Context)
-	{
-		const TArrayView<FTransformFragment> TransformList = Context.GetMutableFragmentView<FTransformFragment>();
+		{
+			const TArrayView<FTransformFragment> TransformList = Context.GetMutableFragmentView<FTransformFragment>();
 	const TArrayView<FMassMoveTargetFragment> NavTargetList = Context.GetMutableFragmentView<FMassMoveTargetFragment>();
 	const FMassMovementParameters& MovementParams = Context.GetConstSharedFragment<FMassMovementParameters>();
 	UMassDebuggerSubsystem& Debugger = Context.GetMutableSubsystemChecked<UMassDebuggerSubsystem>(World);
@@ -66,21 +66,41 @@ void URandomMovementProcessor::Execute(FMassEntityManager& EntityManager, FMassE
 			MoveTarget.Center = FVector(6000.f, 0.f, CurrentLocation.Z);
 			MoveTarget.DesiredSpeed = FMassInt16Real(MovementParams.DefaultDesiredSpeed);
 		}
+
 		//MoveTarget.Center = FVector(6000.f, 0.f, 1.f);
 		MoveTarget.DistanceToGoal = (MoveTarget.Center - Transform.GetLocation()).Size();
 		MoveTarget.Forward = (MoveTarget.Center - Transform.GetLocation()).GetSafeNormal();
 		MoveTarget.Center = PathFinding->GetNextPathPoint(CurrentLocation, FVector(15000.f, 15000.f, -100.f));
+		FTransform transform(Transform);
+
+		transform.SetScale3D({ 0.0,0.0,0.0 });
+		VisualDataISMCs[VisualComp.VisualType]->GetInstanceTransform(VisualComp.InstanceIndex, transform, true);
+		auto forward = VisualDataISMCs[VisualComp.VisualType]->GetForwardVector();
+		auto newfor = MoveTarget.Center - CurrentLocation;
+		double y = newfor.Y - forward.Y;
+		double x = newfor.X - forward.X;
+
+		auto angle = atan2(y, x);
+		FQuat rot(FVector(0, 0, 1), angle);
+		//FTransform tran;
+		//transform.TransformPosition(CurrentLocation);
+		transform.SetRotation(rot);
+		VisualDataISMCs[VisualComp.VisualType]->UpdateInstanceTransform(VisualComp.InstanceIndex, transform, true);
+
 		if ((MoveTarget.Center - FVector(15000.f, 15000.f, -100.f)).Length() < 50)
 		{
 			Context.Defer().RemoveFragment<FSimDebugVisFragment>(Context.GetEntity(EntityIndex));
 			Context.Defer().RemoveTag< FMassDebuggableTag>(Context.GetEntity(EntityIndex));
 			EntityManager.Defer().DestroyEntity(Context.GetEntity(EntityIndex));
-			FTransform transform;
-			transform.SetScale3D({ 0.0,0.0,0.0 });
+
+
+			//transform.GetRotation();
+			//FQuat rot(FVector(0,0,1), )
+			//transform.SetRotation()
 			VisualDataISMCs[VisualComp.VisualType]->RemoveInstance(VisualComp.InstanceIndex);
 
 		}
 	}
 
-	});
+		});
 }
